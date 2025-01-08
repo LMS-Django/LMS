@@ -1,11 +1,11 @@
+from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
+from django.db.utils import IntegrityError
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
-from .forms import UserCreatingForm
+from .forms import UserCreatingForm, UserLoginForm
 from .models import Course, CustomUser, Theme
 
 
@@ -45,29 +45,61 @@ def register(request):
 
             try:
                 user = CustomUser.objects.create_user(first_name=name, 
-                                                  last_name=last_name,
-                                                  email=email,
-                                                  password=password)
-            except:
-                form = UserCreatingForm(request.POST)
-
-            else:
-                login(request, user)
+                                                    last_name=last_name,
+                                                    email=email,
+                                                    password=password)
+            except IntegrityError:
+                messages.error(request, 'Пользователь с такой почтой уже существует, попробуйте войти.')
+                return redirect('register')
+        
+            login(request, user)
         
         return redirect('main')
 
     else:
         form = UserCreatingForm()
 
-    return render(request, "main/form.html", {"form": form})
+    return render(request, "main/register_page.html", {'form': form, 'title': 'Регистрация'})
+
+
+def custom_login(request):
+    if request.method == 'POST':
+        form = UserLoginForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email_address']
+            password = form.cleaned_data['password']
+
+            try:
+                user = CustomUser.objects.get(email=email)
+            except CustomUser.DoesNotExist:
+                messages.error(request, 'Пользователя с такой почтой не существует,' \
+                               'попробуйте еще раз или зарегистрируйтесь.')
+                return redirect('login')
+
+            if user.check_password(password):
+                login(request, user)
+            
+            else:
+                messages.error(request, 'Неправильный пароль.')
+
+            return redirect('profile')
+
+    else:
+        form = UserLoginForm()
+
+    return render(request, 'main/login_page.html', {'form': form, 'title': 'Вход в аккаунт'})
 
 
 @login_required(login_url='register')
 def get_profile_page(request):
+    if request.user.is_superuser:
+        return redirect('register')
     print(request.user)
     return render(request, 'main/profile.html', {'user_data': str(request.user).split()})
 
 
-def logout_view(request):
-    logout(request)
-    return redirect('main')
+# def custom_logout(request):
+#     if request.method == 'POST':
+#         form = ,
+#     logout(request)
+#     return render(request, 'main/logout.html', {'form': form})
