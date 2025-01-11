@@ -10,9 +10,4 @@ urlpatterns = [
          name='create-course'),
     path('get_all_courses', views.get_all_courses, name='get-courses'),
     path('get_course/<int:pk>', views.get_course, name='get-course'),
-
-    path('register', views.register, name='register'),
-    path('login', views.custom_login, name='login'),
-    path('profile', views.get_profile_page, name='profile'),
-    path('logout', views.custom_logout, name='logout')
 ]
