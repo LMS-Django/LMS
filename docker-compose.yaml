@@ -1,0 +1,80 @@
+version: "3.7"
+services:
+
+  web:
+    container_name: "web"
+    image: nginx:alpine
+    depends_on:
+      - app
+    ports:
+      - "80:80"
+    volumes:
+      - ./config/app.conf:/etc/nginx/conf.d/app.conf
+    networks:
+      - custom
+
+  app:
+    container_name: "app"
+    build: .
+    ports:
+      - "8000:80"
+    depends_on:
+      - postgres
+      - pgadmin
+    networks:
+      - custom
+    volumes:
+      - .:/app
+
+  postgres:
+    image: postgres:13.3
+    environment:
+      POSTGRES_DB: "lms_db"
+      POSTGRES_USER: "admin"
+      POSTGRES_PASSWORD: "admin"
+    volumes:
+      - .:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+    networks:
+      - custom
+
+  pgadmin:
+    container_name: pgadmin_container
+    image: dpage/pgadmin4:7.2
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "admin@admin.com"
+      PGADMIN_DEFAULT_PASSWORD: "admin"
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    ports:
+      - "5050:80"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 1G
+    networks:
+      - custom
+
+  portainer:
+    container_name: portainer
+    image: portainer/portainer-ce:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer-data:/data
+    ports:
+      - "9000:9000"
+    restart: unless-stopped
+    networks:
+      - custom
+
+volumes:
+  pgadmin-data:
+  portainer-data:
+
+networks:
+  custom:
+    driver: bridge

@@ -1,7 +1,12 @@
-1) Создать виртуальное окружение (или подключить имеющееся)
-2) Импортировать все необходимые библиотеки: `pip install -r requirements.txt`
-3) В файле .env проставить значения, необходимые для установления соединения с postgresql
-4) Выполнить миграцию: `python manage.py migrate`
-5) Создать суперпользователя `python manage.py createsuperuser`
-6) Запустить сервер: `python manage.py runserver`
-   
+1) Создать файл .env и протавить в нём следующие значения:
+```bash
+NAME=lms_db
+HOST=postgres
+PORT=5432
+USER=admin
+PASSWORD=admin
+```
+2) Запустить сервисы с помощью docker-compose:
+```bash
+docker-compose up -d
+```
