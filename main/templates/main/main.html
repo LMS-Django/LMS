@@ -2,18 +2,19 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Главная страница</title>
+    <title>LMS</title>
 </head>
 <body>
-    Главная страница сайта
-    <p>
-        <a href="{% url 'profile' %}">Профиль</a>
-    </p>
+    Добро пожаловать на систему электронного обучения.
+    Пожалуйста, выберите дальнейшее действие.
     <p>
         <a href="{% url 'register' %}">Зарегистрироваться</a>
     </p>
     <p>
-        <a href="{% url 'login' %}">Войти</a>
+        <a href="{% url 'login_stud' %}">Вход для студентов</a>
+    </p>
+    <p>
+        <a href="{% url 'login_teacher' %}">Вход для преподавателей</a>
     </p>
 </body>
 </html>
