@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
 
-from .models import Course, Theme
+from .models import Course, Topic
 
 
 def main_page(request):
