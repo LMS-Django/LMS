@@ -1,45 +1,66 @@
-import datetime
-
 from django.db import models
-
+from django.conf import settings
 
 class Course(models.Model):
-
-    class Meta:
-        verbose_name = 'Курс'
-        verbose_name_plural = 'Курсы'
-
-    name = models.CharField(max_length=50)
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    teacher = models.ForeignKey(
+        settings.AUTH_USER_MODEL, 
+        on_delete=models.SET_NULL, 
+        null=True, 
+        related_name="courses"
+    )
 
     def __str__(self):
-        return 'Course ' + self.name + ' ' + str(self.id)
-    
+        return self.title
+
 
 class Topic(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="topics")
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    is_open = models.BooleanField(default=False)
 
-    class Meta:
-        verbose_name = 'Тема'
-        verbose_name_plural = 'Темы'
-
-    name = models.CharField(max_length=50)
-    open = models.BooleanField(default=False)
-    course = models.ForeignKey(Course, related_name='topics', on_delete=models.CASCADE)
-
-
-class Lection(models.Model):
-
-    class Meta:
-        verbose_name = 'Лекционный материал'
-        verbose_name_plural = 'Лекционные материалы'
-
-    name = models.CharField(max_length=50)
-    date_published = models.DateTimeField(auto_now_add=True)
-    deadline = models.DateTimeField(default=datetime.datetime.now() \
-                                    + datetime.timedelta(days=14))
-    topic = models.ForeignKey(Topic, related_name='tasks', on_delete=models.CASCADE)
+    def __str__(self):
+        return f"{self.title} ({self.course.title})"
 
 
-class Hometask(models.Model):
+class Assignment(models.Model):
+    topic = models.ForeignKey(Topic, on_delete=models.CASCADE, related_name="assignments")
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    due_date = models.DateField()
+    file = models.FileField(upload_to="assignments/files/", null=True, blank=True)
 
-    class Meta:
-        verbose_name = 'Домашнее задание'
+    def __str__(self):
+        return self.title
+
+
+class StudentsGroup(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="students_groups")
+    name = models.CharField(max_length=255)
+    students = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="students_groups")
+
+    def __str__(self):
+        return f"{self.name} ({self.course.title})"
+
+
+class Attendance(models.Model):
+    group = models.ForeignKey(StudentsGroup, on_delete=models.CASCADE, related_name="attendance_records")
+    student = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    date = models.DateField()
+    is_present = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.student.username} - {self.date} - {self.is_present}"
+
+
+class Homework(models.Model):
+    assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE, related_name="submissions")
+    student = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    file = models.FileField(upload_to="homework/files/", null=True, blank=True)
+    link = models.URLField(null=True, blank=True)
+    submission_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.student.username} - {self.assignment.title}"
