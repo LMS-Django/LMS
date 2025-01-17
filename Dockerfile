@@ -16,9 +16,6 @@ COPY requirements.txt /app/requirements.txt
 # Установим Python-зависимости
 RUN python -m pip install --no-cache-dir -r requirements.txt
 
-# Копируем остальной код
-COPY . /app
-
 # Открываем порт
 EXPOSE 8000
 
