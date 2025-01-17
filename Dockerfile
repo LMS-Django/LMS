@@ -19,5 +19,8 @@ RUN python -m pip install --no-cache-dir -r requirements.txt
 # Открываем порт
 EXPOSE 8000
 
-# Выполняем команды с задержкой 5 секунд
-CMD ["sh", "-c", "sleep 5 && python manage.py migrate --check && python create_superuser.py && python manage.py runserver 0.0.0.0:8000"]
+# Скрипт запуска
+COPY entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+
+CMD ["/app/entrypoint.sh"]
