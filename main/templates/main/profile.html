@@ -1,13 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Профиль студента</title>
-</head>
-<body>
-    <h1>
-        Ваши данные профиля:
-    </h1>
-    {{ user_data.0 }}
-</body>
-</html>
+<div class="container py-5">
+    <h1 class="text-center mb-4">Ваши данные профиля</h1>
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title">Информация о пользователе:</h5>
+            <p class="card-text">{{ user_data.0 }}</p>
+        </div>
+    </div>
+</div>
+\

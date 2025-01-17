@@ -23,4 +23,4 @@ COPY . /app
 EXPOSE 8000
 
 # Выполняем команды с задержкой 5 секунд
-CMD ["sh", "-c", "sleep 5 && python manage.py migrate && python manage.py createsuperuser --noinput --first_name admin --last_name admin --email admin@example.com && python manage.py runserver 0.0.0.0:8000"]
+CMD ["sh", "-c", "sleep 5 && python manage.py migrate --check && python create_superuser.py && python manage.py runserver 0.0.0.0:8000"]
