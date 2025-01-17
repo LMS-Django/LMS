@@ -25,36 +25,6 @@ services:
       - "5432:5432"
     networks:
       - custom
-
-  pgadmin:
-:...skipping...
-version: "3.7"
-services:
-  app:
-    container_name: "app"
-    build: .
-    ports:
-      - "8000:8000"
-    depends_on:
-      - postgres
-      - pgadmin
-    networks:
-      - custom
-    volumes:
-      - .:/app
-
-  postgres:
-    image: postgres:13.3
-    environment:
-      POSTGRES_DB: "lms_db"
-      POSTGRES_USER: "admin"
-      POSTGRES_PASSWORD: "admin"
-    volumes:
-      - .:/docker-entrypoint-initdb.d
-    ports:
-      - "5432:5432"
-    networks:
-      - custom
     networks:
       - custom
 
