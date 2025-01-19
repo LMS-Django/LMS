@@ -96,4 +96,3 @@ sudo chmod +x entrypoint.sh
     ├── tests.py
     ├── urls.py
     └── views.py
-```
