@@ -41,6 +41,7 @@ sudo chmod +x entrypoint.sh
 
 # Структура проекта
 
+```plaintext 
 ├── Dockerfile
 ├── README.md
 ├── create_superuser.py
@@ -96,3 +97,4 @@ sudo chmod +x entrypoint.sh
     ├── tests.py
     ├── urls.py
     └── views.py
+```
