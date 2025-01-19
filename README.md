@@ -38,3 +38,62 @@ sudo chmod +x entrypoint.sh
 ```
 
 После этих действий и успешного запуска контейнеров можно с помощью браузера переходить на сайт через порт 8000
+
+# Структура проекта
+
+├── Dockerfile
+├── README.md
+├── create_superuser.py
+├── docker-compose.yaml
+├── entrypoint.sh
+├── get-docker.sh
+├── lms
+│   ├── __init__.py
+│   ├── asgi.py
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+├── main
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── forms.py
+│   ├── migrations
+│   ├── models.py
+│   ├── templates
+│   │   └── main
+│   │       ├── 404.html
+│   │       ├── all_courses_list.html
+│   │       ├── base.html
+│   │       ├── course_details.html
+│   │       ├── login_page.html
+│   │       ├── logout.html
+│   │       ├── main.html
+│   │       ├── profile.html
+│   │       └── register_page.html
+│   ├── tests.py
+│   ├── urls.py
+│   └── views.py
+├── manage.py
+├── project_structure.txt
+├── requirements.txt
+└── users
+    ├── __init__.py
+    ├── admin.py
+    ├── apps.py
+    ├── forms.py
+    ├── migrations
+    │   ├── 0001_initial.py
+    │   └── __init__.py
+    ├── models.py
+    ├── templates
+    │   └── users
+    │       ├── base.html
+    │       ├── login_page.html
+    │       ├── logout.html
+    │       ├── profile.html
+    │       └── register_page.html
+    ├── tests.py
+    ├── urls.py
+    └── views.py
+```
