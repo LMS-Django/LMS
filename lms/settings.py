@@ -14,15 +14,8 @@ import dotenv
 from pathlib import Path
 
 dotenv.load_dotenv()
+db_conf = dict(dotenv.dotenv_values('.env'))
 
-# Считываем переменные из .env файла
-env_data = dict(dotenv.dotenv_values('.env'))
-
-# Отфильтруем значения для db_conf
-db_conf = {key: env_data[key] for key in ["NAME", "HOST", "PORT", "USER", "PASSWORD"] if key in env_data}
-
-# Получим отдельно значение для IP
-ip_address = env_data.get("IP")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -37,7 +30,7 @@ SECRET_KEY = 'django-insecure-u^i+9u4^=1c4j8e90c_t9u4lic4tpyc-8&aacx#mt^ma2s_zwr
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [ip_address]
+ALLOWED_HOSTS = []
 
 
 # Application definition

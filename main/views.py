@@ -1,17 +1,43 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+import random
 
+from .models import Course, Topic
 
-from .models import Course, Theme
+def is_teacher(user):
+    return user.user_type == 'teacher'
+
+def is_student(user):
+    return user.user_type == 'student'
 
 
 def main_page(request):
     return render(request, 'main/main.html')
 
 
-def create_course(request, name):
-    new_course = Course.objects.create(name=name)
-    return HttpResponse(f'created course object {new_course}')
+def view_all_courses(request):
+    if not request.user.is_authenticated:
+        return render(request, 'main/404.html')
+    
+    if is_teacher(request.user):
+        courses = Course.objects.all()
+        my_courses = []
+        for course in courses:
+            if course.teacher == request.user:
+                my_courses.append(course)
+    
+    elif is_student(request.user):
+        courses = Course.objects.all()
+        my_courses = []
+        for course in courses:
+            if course.teacher == request.user:
+                my_courses.append(course)
+
+    return render(request, 'all_courses_list.html', {'courses': my_courses})
+
+
+
+# def change_course(request, id):
 
 
 def get_all_courses(request):

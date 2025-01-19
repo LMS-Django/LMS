@@ -1,10 +1,23 @@
 version: "3.7"
 services:
+
+  web:
+    container_name: "web"
+    image: nginx:alpine
+    depends_on:
+      - app
+    ports:
+      - "80:80"
+    volumes:
+      - ./config/app.conf:/etc/nginx/conf.d/app.conf
+    networks:
+      - custom
+
   app:
     container_name: "app"
     build: .
     ports:
-      - "8000:8000"
+      - "8000:80"
     depends_on:
       - postgres
       - pgadmin
@@ -25,8 +38,6 @@ services:
       - "5432:5432"
     networks:
       - custom
-    networks:
-      - custom
 
   pgadmin:
     container_name: pgadmin_container
@@ -38,7 +49,7 @@ services:
     volumes:
       - pgadmin-data:/var/lib/pgadmin
     ports:
-      - "5050:5050"
+      - "5050:80"
     restart: unless-stopped
     deploy:
       resources:
