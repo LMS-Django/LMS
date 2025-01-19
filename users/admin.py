@@ -7,5 +7,5 @@ class CustomUserAdmin(UserAdmin):
     fieldsets = UserAdmin.fieldsets + (
         (None, {'fields': ('user_type',)}),
     )
-    list_display = ('username', 'email', 'user_type', 'is_staff')
+    list_display = ('username', 'email', 'user_type')
     list_filter = ('user_type',)

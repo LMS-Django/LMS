@@ -10,6 +10,12 @@ class Course(models.Model):
         null=True, 
         related_name="courses"
     )
+    students = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        related_name="enrolled_courses",
+        blank=True,
+        limit_choices_to={'user_type': 'student'}
+    )
 
     def __str__(self):
         return self.title

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ course.title }}</title>
+</head>
+<body>
+    <h1>{{ course.title }}</h1>
+    <p>{{ course.description }}</p>
+    
+    <ul>
+        {% for topic in course.topics %}
+            <li>
+                <h2>{{ topic.title }}</h2>
+                <p>{{ topic.description }}</p>
+                
+                <ul>
+                    {% for assignment in topic.assignments %}
+                        <li>
+                            <h3>{{ assignment.title }}</h3>
+                            <p>{{ assignment.description }}</p>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
