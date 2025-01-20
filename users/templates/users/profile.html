@@ -8,6 +8,17 @@
     <h1>
         Ваши данные профиля:
     </h1>
-    {{ user_data.0 }}
+    {{ user_data }}
+    <a href="{% url 'password_reset' %}">Сменить пароль</a>
+    {% if len(courses) != 0 %}
+    <ul>
+    {% for course in courses %}
+        <li>
+            <a href="url 'course_detail' course.id">{{ course.title }}</a>
+            <p>{{ course.description }}</p>
+        </li>
+    {% endfor %}
+    </ul>
+    {% endif %}
 </body>
 </html>

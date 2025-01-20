@@ -7,5 +7,7 @@ class CustomUserAdmin(UserAdmin):
     fieldsets = UserAdmin.fieldsets + (
         (None, {'fields': ('user_type',)}),
     )
-    list_display = ('username', 'email', 'user_type')
+
+    list_display = ('email', 'first_name', 'last_name', 'user_type')
+    ordering = ('last_name', 'first_name', 'email')
     list_filter = ('user_type',)

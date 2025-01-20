@@ -1,4 +1,4 @@
-from django.forms import Form, CharField, EmailField, PasswordInput
+from django.forms import Form, CharField, EmailField, PasswordInput, MultipleChoiceField, SelectMultiple
 
 
 class UserCreatingForm(Form):
@@ -11,3 +11,9 @@ class UserCreatingForm(Form):
 class UserLoginForm(Form):
     email_address = CharField(max_length=100, label='Электронная почта')
     password = CharField(widget=PasswordInput, label='Пароль')
+
+
+class PasswordResetForm(Form):
+    password = CharField(widget=PasswordInput, label='Пароль')
+    password_confirm = CharField(widget=PasswordInput, label='Подтверждение пароля')
+

@@ -1,13 +1,20 @@
 from django.forms import Form, CharField, EmailField, PasswordInput
+from django.forms import Form, MultipleChoiceField, SelectMultiple
+
+from users.models import CustomUser
 
 
-class UserCreatingForm(Form):
-    first_name = CharField(max_length=100, label='Имя')
-    last_name = CharField(max_length=100, label='Фамилия')
-    email_address = EmailField(max_length=100, label='Электронная почта')
-    password = CharField(widget=PasswordInput, label='Пароль')
+class ChooseStudentsForm(Form):
+    options = MultipleChoiceField(
+        widget=SelectMultiple,
+        required=False, 
+        label="Выберите студентов для добавления в курс"
+    )
 
+    def __init__(self, *args, **kwargs):
+        course = kwargs.pop('course')
+        super().__init__(*args, **kwargs)
 
-class UserLoginForm(Form):
-    email_address = CharField(max_length=100, label='Электронная почта')
-    password = CharField(widget=PasswordInput, label='Пароль')
+        students = CustomUser.objects.filter(user_type='student').exclude(courses=course)
+        
+        self.fields['options'].choices = [(str(student.id), student) for student in students]

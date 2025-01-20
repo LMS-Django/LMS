@@ -4,6 +4,13 @@
 <h1>
     Введите данные для регистрации:
 </h1>
+{% if messages %}
+        {% for message in messages %}
+            <div style="color: red;">{{ message }}</div>
+        {% endfor %}
+    <a href="{% url 'login_stud' %}">Страница входа (студент)</a>
+    <a href="{% url 'login_teacher' %}">Страница входа (преподаватель)</a>
+    {% endif %}
 <form method="post" action="">
     {% csrf_token %}
      <table>
