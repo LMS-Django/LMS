@@ -41,16 +41,21 @@ def view_all_courses(request):
     return render(request, 'all_courses_list.html', {'courses': my_courses})
 
 
-@login_required(login_url='register')
+@login_required(login_url='login_stud')
 def get_course(request, pk):
     if request.user.user_type == 'teacher':
-        return redirect('change_course')
+        return redirect('change_course', pk=pk)
     elif request.user.user_type == 'student':
-        course = Course.objects.get(id=pk)
+        try:
+            course = Course.objects.get(id=pk)
+        except:
+            return render(request, 'main/404.html')
+
         return render(request, 'main/course_details.html', {'course': course})
 
 
-def change_course(request, pk):
+@login_required(login_url='login_stud')
+def add_students(request, pk):
     try:
         course = Course.objects.get(id=pk)
     except:
@@ -60,14 +65,31 @@ def change_course(request, pk):
         form = ChooseStudentsForm(request.POST, course=course)
         if form.is_valid():
             selected_options = form.cleaned_data['options']
-            selected_names = [student for student in CustomUser.objects.filter(id__in=selected_options)]
-            print(selected_names)
-            if selected_options:
-                return HttpResponse(f"Вы выбрали: {', '.join(list(map(str, selected_names)))}")
-            else:
-                return HttpResponse("Вы не выбрали опции.")
+            student_ids = [student.id for student in CustomUser.objects.filter(id__in=selected_options)]
+            print(student_ids)
+
+            for student_id in student_ids:
+                student = CustomUser.objects.get(id=student_id)
+                course.students.add(student)
+
+            return redirect('course_detail', pk=pk)
+            
     else:
         form = ChooseStudentsForm(course=course)
 
-    return render(request, 'main/change_course.html', {'form': form, 'course': course})
+    students = CustomUser.objects.filter(user_type='student').exclude(enrolled_courses=course)
+    not_superusers = [(str(student.id), student) for student in students if not student.is_superuser]
 
+    return render(request, 'main/add_students.html', {'form': form, 
+                                                      'is_empty': len(not_superusers) == 0,
+                                                      'course': course})
+
+
+@login_required(login_url='stud')
+def change_course(request, pk):
+    try:
+        course = Course.objects.get(id=pk)
+    except:
+        return render(request, 'main/404.html')
+
+    return render(request, 'main/change_course.html', {'course': course})

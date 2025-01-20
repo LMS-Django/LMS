@@ -74,9 +74,14 @@ def custom_login(request):
 
 @login_required(login_url='register')
 def get_profile_page(request):
-    # if request.user.is_superuser:
-    #     return redirect('admin')
-    return render(request, 'users/profile.html', {'user_data': request.user})
+    user = request.user
+    if user.user_type == 'teacher':    
+        courses = user.courses.all()
+    
+    elif user.user_type == 'student':
+        courses = user.enrolled_courses.all()
+    
+    return render(request, 'users/profile.html', {'user_data': request.user, 'user_type': user.user_type, 'courses': courses})
 
 
 def custom_logout(request):

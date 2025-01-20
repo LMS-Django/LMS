@@ -17,4 +17,4 @@ class ChooseStudentsForm(Form):
 
         students = CustomUser.objects.filter(user_type='student').exclude(courses=course)
         
-        self.fields['options'].choices = [(str(student.id), student) for student in students]
+        self.fields['options'].choices = [(str(student.id), student) for student in students if not student.is_superuser]

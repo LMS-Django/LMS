@@ -2,16 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Настройка курсов</title>
+    <title>Document</title>
 </head>
 <body>
-    <form method="POST" action="{% url 'change_course' course.id %}">
-        {% csrf_token %}
-        
-        <label for="{{ form.options.id_for_label }}">{{ form.options.label }}</label>
-        {{ form.options }}
-        
-        <button type="submit">Отправить</button>
-    </form>
+    <h1>{{ course.title }}</h1>
+    <p>{{ course.description }}</p>
 </body>
 </html>

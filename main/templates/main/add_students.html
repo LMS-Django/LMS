@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Настройка курсов</title>
+</head>
+<body>
+    {% if not is_empty %}
+    <form method="POST" action="{% url 'add_students' course.id %}">
+        {% csrf_token %}
+        
+        <label for="{{ form.options.id_for_label }}">{{ form.options.label }}</label>
+        {{ form.options }}
+        
+        <button type="submit">Отправить</button>
+    </form>
+    {% else %}
+    <form method="POST" action="{% url 'add_students' course.id %}">
+        {% csrf_token %}
+        <p>Нет студентов, доступных для добавления в данный курс</p>
+        <button type="submit">Перейти к информации по курсу</button>
+    </form>
+    {% endif %}
+</body>
+</html>

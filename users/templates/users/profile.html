@@ -1,16 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Профиль студента</title>
-</head>
-<body>
-    <h1>
-        Ваши данные профиля:
-    </h1>
-    {{ user_data }}
+{% extends 'users/base.html' %}
+
+{% block content %}
+    <div class="container py-5">
+        <h1 class="text-center mb-4">Ваши данные профиля</h1>
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">Информация о пользователе:</h5>
+                <p class="card-text">{{ user_data }}</p>
+            </div>
+        </div>
+    </div>
     <a href="{% url 'password_reset' %}">Сменить пароль</a>
-    {% if len(courses) != 0 %}
+    {% if user_type == "teacher" %}
+        <h2>Курсы, которые вы ведете:</h2>
+    {% elif user_type == "student" %}
+        <h2>Курсы, на которые вы зачислены:</h2>
+    {% endif %}
     <ul>
     {% for course in courses %}
         <li>
@@ -19,6 +24,4 @@
         </li>
     {% endfor %}
     </ul>
-    {% endif %}
-</body>
-</html>
+{% endblock %}

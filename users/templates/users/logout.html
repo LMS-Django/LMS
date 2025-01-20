@@ -1,17 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Выход из аккаунта</title>
-</head>
-<body>
-    <h1>
+{% extends 'users/base.html' %}
+
+{% block content %}
+<body class="bg-light" style="text-align: center; margin-top: 50px;">
+    <h1 style="font-family: Arial, sans-serif; color: #0d6efd;"> <!-- btn-primary color -->
         Хотите выйти?
     </h1>
-    <form action="{% url 'logout' %}" method="post">
+    <form action="{% url 'logout' %}" method="post" style="max-width: 400px; margin: 0 auto; padding: 20px; border: 1px solid #0d6efd; border-radius: 10px; background-color: #f0f8ff;">
         {% csrf_token %}
-        <button type="submit">Выйти из профиля</button>
-    </form>
-</body>
-</html>
+        <div style="text-align: center; margin-top: 20px;">
+            <button type="submit" style="padding: 10px 20px; background-color: #0d6efd; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">
+                Выйти из профиля
+            </button>
+{% endblock %}
