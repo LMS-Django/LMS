@@ -23,15 +23,4 @@ COPY . /app
 EXPOSE 8000
 
 # Команда запуска
-CMD sh -c "\
-    sleep 10 && \
-    if python3 manage.py migrate --check --noinput; then \
-        echo 'Миграции уже применены.'; \
-    else \
-        echo 'Применяем миграции...'; \
-        python3 manage.py migrate --noinput; \
-    fi && \
-    echo 'Создаем суперпользователя...' && \
-    python3 create_superuser.py && \
-    echo 'Запуск сервера...' && \
-    exec python3 manage.py runserver 0.0.0.0:8000"
+CMD ["sh", "-c", "python manage.py makemigrations main users && python manage.py migrate && python manage.py createsuperuser --noinput --first_name admin --last_name admin --email admin@example.com && python manage.py runserver 0.0.0.0:8000"]
