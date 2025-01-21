@@ -58,11 +58,14 @@ def custom_login(request):
                                'попробуйте еще раз или зарегистрируйтесь.')
                 return redirect('login_stud')
 
+            print(user.check_password(password))
             if user.check_password(password):
+                
                 login(request, user)
             
             else:
                 messages.error(request, 'Неправильный пароль.')
+                return redirect('login_stud')
 
             return redirect('profile')
 
@@ -84,10 +87,11 @@ def get_profile_page(request):
     return render(request, 'users/profile.html', {'user_data': request.user, 'user_type': user.user_type, 'courses': courses})
 
 
+@login_required(login_url='main')
 def custom_logout(request):
     if request.method == 'POST':
         logout(request)
-        return redirect('login_stud')
+        return redirect('main')
     return render(request, 'users/logout.html')
 
 
@@ -108,7 +112,10 @@ def password_reset(request):
                 messages.error(request, 'Новый пароль не должен совпадать со старым')
                 return redirect('password_reset')
             
-            user.password = password
+            user.set_password(password)
+            user.save()
+
+            login(request, user)
         
         return redirect('profile')
 
@@ -116,5 +123,3 @@ def password_reset(request):
         form = PasswordResetForm()
 
     return render(request, "users/reset_password.html", {'form': form})
-
-# Create your views here.

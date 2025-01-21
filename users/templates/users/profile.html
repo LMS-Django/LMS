@@ -11,6 +11,7 @@
         </div>
     </div>
     <a href="{% url 'password_reset' %}">Сменить пароль</a>
+    <a href="{% url 'logout' %}">Выйти из профиля</a>
     {% if user_type == "teacher" %}
         <h2>Курсы, которые вы ведете:</h2>
     {% elif user_type == "student" %}
@@ -19,7 +20,7 @@
     <ul>
     {% for course in courses %}
         <li>
-            <a href="url 'course_detail' course.id">{{ course.title }}</a>
+            <a href="{% url 'course_detail' course.id %}">{{ course.title }}</a>
             <p>{{ course.description }}</p>
         </li>
     {% endfor %}

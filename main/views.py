@@ -17,7 +17,7 @@ def is_student(user):
 
 
 def main_page(request):
-    return render(request, 'main/main.html')
+    return render(request, 'main/main.html', {'auth': request.user.is_authenticated})
 
 
 def view_all_courses(request):
@@ -85,11 +85,11 @@ def add_students(request, pk):
                                                       'course': course})
 
 
-@login_required(login_url='stud')
+@login_required(login_url='main')
 def change_course(request, pk):
     try:
         course = Course.objects.get(id=pk)
-    except:
+    except DoesNotExist:
         return render(request, 'main/404.html')
 
     return render(request, 'main/change_course.html', {'course': course})

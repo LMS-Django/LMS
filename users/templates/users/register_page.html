@@ -28,6 +28,13 @@
                     <button type="submit" class="btn btn-primary btn-lg">Зарегистрироваться</button>
                 </div>
             </div>
+            
         </div>
     </form>
+    <div class="text-center">
+        <!-- Кнопка отправки с использованием Bootstrap -->
+        <button onclick="window.location.href='{% url 'login_stud' %}'" 
+                class="btn btn-primary btn-lg"
+                style="margin-top: 20px;">Войти</button>
+    </div>
 {% endblock %}
