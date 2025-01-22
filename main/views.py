@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 import random
@@ -41,7 +42,7 @@ def view_all_courses(request):
     return render(request, 'all_courses_list.html', {'courses': my_courses})
 
 
-@login_required(login_url='login_stud')
+@login_required(login_url='login_student')
 def get_course(request, pk):
     if request.user.user_type == 'teacher':
         return redirect('change_course', pk=pk)
@@ -54,7 +55,7 @@ def get_course(request, pk):
         return render(request, 'main/course_details.html', {'course': course})
 
 
-@login_required(login_url='login_stud')
+@login_required(login_url='login_student')
 def add_students(request, pk):
     try:
         course = Course.objects.get(id=pk)
@@ -89,7 +90,7 @@ def add_students(request, pk):
 def change_course(request, pk):
     try:
         course = Course.objects.get(id=pk)
-    except DoesNotExist:
+    except ObjectDoesNotExist:
         return render(request, 'main/404.html')
 
     return render(request, 'main/change_course.html', {'course': course})

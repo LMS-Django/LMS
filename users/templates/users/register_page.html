@@ -10,8 +10,6 @@
             <div class="alert alert-danger" role="alert">{{ message }}</div>
         {% endfor %}
     </div>
-    <a href="{% url 'login_stud' %}">Страница входа (студент)</a>
-    <a href="{% url 'login_teacher' %}">Страница входа (преподаватель)</a>
     {% endif %}
     
     <form method="post" action="" class="container py-4" style="max-width: 600px;">
@@ -33,7 +31,7 @@
     </form>
     <div class="text-center">
         <!-- Кнопка отправки с использованием Bootstrap -->
-        <button onclick="window.location.href='{% url 'login_stud' %}'" 
+        <button onclick="window.location.href='{% url 'login_student' %}'" 
                 class="btn btn-primary btn-lg"
                 style="margin-top: 20px;">Войти</button>
     </div>

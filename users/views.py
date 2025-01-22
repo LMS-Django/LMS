@@ -41,7 +41,7 @@ def register(request):
     return render(request, "users/register_page.html", {'form': form, 'title': 'Регистрация'})
 
 
-def custom_login(request):
+def login_student(request):
     if request.user.is_authenticated:
         return redirect('profile')
     
@@ -52,30 +52,62 @@ def custom_login(request):
             password = form.cleaned_data['password']
 
             try:
-                user = CustomUser.objects.get(email=email)
+                user = CustomUser.objects.get(email=email, user_type='student')
             except CustomUser.DoesNotExist:
-                messages.error(request, 'Пользователя с такой почтой не существует,' \
+                messages.error(request, 'Пользователя с такой почтой не существует, ' \
                                'попробуйте еще раз или зарегистрируйтесь.')
-                return redirect('login_stud')
+                return redirect('login_student')
 
-            print(user.check_password(password))
             if user.check_password(password):
                 
                 login(request, user)
             
             else:
                 messages.error(request, 'Неправильный пароль.')
-                return redirect('login_stud')
+                return redirect('login_student')
 
             return redirect('profile')
 
     else:
         form = UserLoginForm()
 
-    return render(request, 'users/login_page.html', {'form': form, 'title': 'Вход в аккаунт'})
+    return render(request, 'users/login_page_student.html', {'form': form, 'title': 'Вход в аккаунт (студент)'})
 
 
-@login_required(login_url='register')
+def login_teacher(request):
+    if request.user.is_authenticated:
+        return redirect('profile')
+    
+    if request.method == 'POST':
+        form = UserLoginForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email_address']
+            password = form.cleaned_data['password']
+
+            try:
+                user = CustomUser.objects.get(email=email, user_type='teacher')
+            except CustomUser.DoesNotExist:
+                messages.error(request, 'Пользователя с такой почтой не существует, ' \
+                               'попробуйте еще раз или обратитесь к администратору системы для вашей регистрации.')
+                return redirect('login_teacher')
+
+            if user.check_password(password):
+                
+                login(request, user)
+            
+            else:
+                messages.error(request, 'Неправильный пароль.')
+                return redirect('login_teacher')
+
+            return redirect('profile')
+
+    else:
+        form = UserLoginForm()
+
+    return render(request, 'users/login_page_teacher.html', {'form': form, 'title': 'Вход в аккаунт (преподаватель)'})
+
+
+@login_required(login_url='login_stud')
 def get_profile_page(request):
     user = request.user
     if user.user_type == 'teacher':    
@@ -95,7 +127,7 @@ def custom_logout(request):
     return render(request, 'users/logout.html')
 
 
-@login_required(login_url='login_stud')
+@login_required(login_url='login_student')
 def password_reset(request):
     if request.method == 'POST':
         form = PasswordResetForm(request.POST)
