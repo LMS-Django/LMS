@@ -7,5 +7,14 @@
 <body>
     <h1>{{ course.title }}</h1>
     <p>{{ course.description }}</p>
+    <ul>
+    {% for topic in course.topics.all %}
+    <li>
+        <div>
+            {{ topic.title }}
+        </div>
+    </li>
+    {% endfor %}
+</ul>
 </body>
 </html>

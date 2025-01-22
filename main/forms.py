@@ -1,6 +1,6 @@
-from django.forms import Form, CharField, EmailField, PasswordInput
-from django.forms import Form, MultipleChoiceField, SelectMultiple
+from django.forms import Form, ModelForm, MultipleChoiceField, SelectMultiple
 
+from main.models import Task
 from users.models import CustomUser
 
 
@@ -18,3 +18,9 @@ class ChooseStudentsForm(Form):
         students = CustomUser.objects.filter(user_type='student').exclude(courses=course)
         
         self.fields['options'].choices = [(str(student.id), student) for student in students if not student.is_superuser]
+
+
+class AssignmentUpload(ModelForm):
+    class Meta:
+        model = Task
+        exclude = []

@@ -4,9 +4,10 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 import random
 
-from .models import Course, Topic
 
-from .forms import ChooseStudentsForm
+from .models import Course, Topic, Task
+
+from .forms import ChooseStudentsForm, AssignmentUpload
 
 from users.models import CustomUser
 
@@ -94,3 +95,21 @@ def change_course(request, pk):
         return render(request, 'main/404.html')
 
     return render(request, 'main/change_course.html', {'course': course})
+
+
+def upload_assignment(request):
+    if request.method == 'POST':
+        form = AssignmentUpload(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+        
+    else:
+        form = AssignmentUpload()
+
+    return render(request, 'main/upload_task.html', {'form': form})
+
+
+def get_assignment(request):
+    assignments = Task.objects.all()
+    return render(request, 'main/get_task.html', {'assignment': assignments})
