@@ -7,7 +7,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
 from .exceptions import NoDataError, ExessDataError
-from .forms import ChooseStudentsForm, AssignmentUpload
+from .forms import ChooseStudentsForm, AssignmentUpload, TopicCreatingForm
 from .models import Course, Topic, Task
 
 from users.models import CustomUser
@@ -48,10 +48,10 @@ def view_all_courses(request):
 
 @login_required(login_url='login_student')
 def get_course(request, pk):
-    if request.user.user_type == 'teacher':
+    if is_teacher(request.user):
         return redirect('change_course', pk=pk)
     
-    elif request.user.user_type == 'student':
+    elif is_student(request.user):
         try:
             course = Course.objects.get(id=pk)
         except:
@@ -125,3 +125,20 @@ def get_assignment(request, pk):
     assignment = Task.objects.get(id=pk)
     # print(assignment)
     return render(request, 'main/get_task.html', {'assignment': assignment})
+
+
+def add_topic(request):
+    if request.method == 'POST':
+        form = TopicCreatingForm(request.POST)
+        if form.is_valid():
+            
+            course = form.cleaned_data['course']
+            new_topic = form.save()
+
+            # prev_url = request.META.get('HTTP_REFERER', )
+            return redirect('change_course', course.id)
+
+    else:
+        form = TopicCreatingForm()
+
+    return render(request, 'main/add_topic.html', {'form': form})

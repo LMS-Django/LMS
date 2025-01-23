@@ -12,4 +12,5 @@ urlpatterns = [
     path('add_students/<int:pk>', views.add_students, name='add_students'),
     path('upload_assignment', views.upload_assignment, name='upload_homework'),
     path('get_assignment/<int:pk>', views.get_assignment, name='get_assignment'),
+    path('add_topic', views.add_topic, name='add_topic')
 ]

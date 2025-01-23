@@ -11,13 +11,15 @@ class Course(models.Model):
         on_delete=models.SET_NULL, 
         null=True, 
         related_name="courses",
-        limit_choices_to={'user_type': 'teacher'}
+        limit_choices_to={'user_type': 'teacher',
+                          'is_superuser': False}
     )
     students = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
         related_name="enrolled_courses",
         blank=True,
-        limit_choices_to={'user_type': 'student'}
+        limit_choices_to={'user_type': 'student',
+                        'is_superuser': False}
     )
 
     def __str__(self):
