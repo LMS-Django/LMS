@@ -6,9 +6,9 @@
     <title>Document</title>
 </head>
 <body>
-    {% for a in assignment %}
-    <a href="{{ a.file.url }}">{{ a.title }}</a>
+    
+    <a href="{{ assignment.file.url }}">{{ assignment.title }}</a>
     <!-- {{ assignment.file }} -->
-    {% endfor %}
+    
 </body>
 </html>

@@ -1,18 +1,21 @@
+import random
+
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-import random
 
-
-from .models import Course, Topic, Task
-
+from .exceptions import NoDataError, ExessDataError
 from .forms import ChooseStudentsForm, AssignmentUpload
+from .models import Course, Topic, Task
 
 from users.models import CustomUser
 
+
 def is_teacher(user):
     return user.user_type == 'teacher'
+
 
 def is_student(user):
     return user.user_type == 'student'
@@ -47,6 +50,7 @@ def view_all_courses(request):
 def get_course(request, pk):
     if request.user.user_type == 'teacher':
         return redirect('change_course', pk=pk)
+    
     elif request.user.user_type == 'student':
         try:
             course = Course.objects.get(id=pk)
@@ -101,7 +105,14 @@ def upload_assignment(request):
     if request.method == 'POST':
         form = AssignmentUpload(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            
+            url = form.cleaned_data['url']
+            file = form.cleaned_data['file']
+        
+            if file and url:
+                messages.error(request, 'Нужно заполнить только одно поле: файл/ссылка на диск.')
+                return redirect(upload_assignment)
+        
             return redirect('profile')
         
     else:
@@ -110,6 +121,7 @@ def upload_assignment(request):
     return render(request, 'main/upload_task.html', {'form': form})
 
 
-def get_assignment(request):
-    assignments = Task.objects.all()
-    return render(request, 'main/get_task.html', {'assignment': assignments})
+def get_assignment(request, pk):
+    assignment = Task.objects.get(id=pk)
+    # print(assignment)
+    return render(request, 'main/get_task.html', {'assignment': assignment})

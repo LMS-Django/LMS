@@ -11,5 +11,5 @@ urlpatterns = [
     path('change_course/<int:pk>', views.change_course, name='change_course'),
     path('add_students/<int:pk>', views.add_students, name='add_students'),
     path('upload_assignment', views.upload_assignment, name='upload_homework'),
-    path('get_assignment', views.get_assignment, name='get_assignment'),
+    path('get_assignment/<int:pk>', views.get_assignment, name='get_assignment'),
 ]

@@ -20,8 +20,9 @@
             <ul>
                 {% for assignment in topic.assignments.all %}
                 <li>
-                    <h3>{{ assignment.title }}</h3>
-                    <p>{{ assignment.description }}</p>
+                    <p>{{ assignment.id }}</p>
+                    <a href="{% url 'get_assignment' assignment.id %}">{{ assignment.title }}</a>
+                    
                 </li>
                 {% endfor %}
             </ul>
