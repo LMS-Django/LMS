@@ -1,20 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Document</title>
-</head>
-<body>
-    <h1>{{ course.title }}</h1>
+{% extends 'users/base.html' %}
+
+{% block content %}
+<div class="text-center" style="margin-top: 50px;">
+    <h1 style="font-family: Arial, sans-serif; color: #0d6efd;">{{ course.title }}</h1>
+</div>
+
+<div class="container" style="max-width: 800px; margin: 20px auto; padding: 20px; border: 1px solid #0d6efd; border-radius: 10px; background-color: #f0f8ff;">
     <p>{{ course.description }}</p>
-    <ul>
-    {% for topic in course.topics.all %}
-    <li>
-        <div>
-            {{ topic.title }}
-        </div>
-    </li>
-    {% endfor %}
-</ul>
-</body>
-</html>
+    
+    <ul class="list-group">
+        {% for topic in course.topics.all %}
+        <li class="list-group-item">
+            <h3 style="font-family: Arial, sans-serif; color: #0d6efd;">{{ topic.title }}</h3>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
