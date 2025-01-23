@@ -19,6 +19,11 @@ RUN python -m pip install --no-cache-dir -r requirements.txt
 # Копируем приложение
 COPY . /app
 
+# Установка переменных окружения
+ENV DJANGO_SUPERUSER_USERNAME=admin
+ENV DJANGO_SUPERUSER_PASSWORD=admin
+ENV DJANGO_SUPERUSER_EMAIL=admin@example.com
+
 # Открываем порт
 EXPOSE 8000
 
