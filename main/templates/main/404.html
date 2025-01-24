@@ -1,11 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Page not found</title>
-</head>
-<body>
-    Возможно, такой страницы не существует, или у вас нет прав для ее просмотра.
-    <a href="{% url 'main' %}">Вернуться на главную страницу</a>
-</body>
-</html>
+{% extends 'users/base.html' %}
+
+{% block content %}
+    <div class="card shadow-sm" style="border: 1px solid #dc3545; background-color: #f8d7da;">
+        <div class="card-body text-center">
+            <h1 class="text-danger mb-3">Страница не найдена</h1>
+            <p>Возможно, такой страницы не существует, или у вас нет прав для ее просмотра.</p>
+        </div>
+    </div>
+    <div class="text-center mt-4">
+        <a href="{% url 'main' %}" class="btn btn-primary btn-lg">Вернуться на главную страницу</a>
+    </div>
+{% endblock %}

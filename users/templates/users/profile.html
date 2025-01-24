@@ -1,31 +1,38 @@
 {% extends 'users/base.html' %}
 
 {% block content %}
-    <div class="container py-5">
-        <h1 class="text-center mb-4">Ваши данные профиля</h1>
-        <div class="card shadow-sm">
+    <div class="container py-5" style="max-width: 900px;">
+        <h1 class="text-center text-primary mb-4">Ваши данные профиля</h1>
+        
+        <div class="card shadow-sm" style="border: 1px solid #0d6efd; background-color: #f0f8ff;">
             <div class="card-body">
                 <h5 class="card-title">Информация о пользователе:</h5>
                 <p class="card-text">{{ user_data }}</p>
             </div>
         </div>
+
+        <div class="text-center mt-4">
+            <a href="{% url 'password_reset' %}" class="btn btn-warning btn-lg">Сменить пароль</a>
+            <a href="{% url 'logout' %}" class="btn btn-danger btn-lg" style="margin-left: 20px;">Выйти из профиля</a>
+        </div>
+        {% if courses %}
+        {% if user_type == "teacher" %}
+            <h2 class="mt-5 text-primary">Курсы, которые вы ведете:</h2>
+        {% elif user_type == "student" %}
+            <h2 class="mt-5 text-primary">Курсы, на которые вы зачислены:</h2>
+        {% endif %}
+        
+        <ul class="list-group mt-3">
+            {% for course in courses %}
+                <li class="list-group-item">
+                    <a href="{% url 'course_detail' course.id %}" class="text-decoration-none text-primary">
+                        <h5>{{ course.title }}</h5>
+                    </a>
+                    <p class="text-muted">{{ course.description }}</p>
+                </li>
+            {% endfor %}
+        </ul>
     </div>
-    <a href="{% url 'password_reset' %}">Сменить пароль</a>
-    <a href="{% url 'logout' %}">Выйти из профиля</a>
-    {% if courses %}
-    {% if user_type == "teacher" %}
-        <h2>Курсы, которые вы ведете:</h2>
-    {% elif user_type == "student" %}
-        <h2>Курсы, на которые вы зачислены:</h2>
-    {% endif %}
-    <ul>
-    {% for course in courses %}
-        <li>
-            <a href="{% url 'course_detail' course.id %}">{{ course.title }}</a>
-            <p>{{ course.description }}</p>
-        </li>
-    {% endfor %}
-    </ul>
     {% else %}
         <h2>У вас пока нет доступных курсов.</h2>
     {% endif %}

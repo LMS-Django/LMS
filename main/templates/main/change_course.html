@@ -1,25 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Document</title>
-</head>
-<body>
-    <h1>{{ course.title }}</h1>
+{% extends 'users/base.html' %}
+
+{% block content %}
+<div class="text-center" style="margin-top: 50px;">
+    <h1 style="font-family: Arial, sans-serif; color: #0d6efd;">{{ course.title }}</h1>
+</div>
+
+<div class="container" style="max-width: 800px; margin: 20px auto; padding: 20px; border: 1px solid #0d6efd; border-radius: 10px; background-color: #f0f8ff;">
     <p>{{ course.description }}</p>
     <ul>
     {% for topic in course.topics.all %}
     <li>
         <div>
-            {{ topic.title }}
+            <h2>{{ topic.title }}</h2>
+            <ul>
+                {% for a in topic.assignments.all %}
+                <li>
+                    <h3>{{ a.title }}</h3>
+                    {{ a.description }}
+                    <div>
+                        <a href="{% url 'change_task' topic.id a.id %}">Отредактировать или удалить задание</a>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
         </div>
 
         <a href="{% url 'upload_assignment' topic.id %}">Добавить материалы в тему</a>
         <a href="{% url 'change_topic' course.id topic.id %}">Отредактировать тему</a>
         <a href="{% url 'delete_topic' course.id topic.id %}">Удалить тему</a>
-
     </li>
     {% endfor %}
+    <a href="{% url 'add_topic' course.id %}">Создать тему</a> 
 </ul>
 </body>
 </html>

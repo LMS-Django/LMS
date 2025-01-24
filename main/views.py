@@ -1,18 +1,21 @@
+import random
+
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-import random
 
-
+from .exceptions import NoDataError, ExessDataError
+from .forms import ChooseStudentsForm, AssignmentUpload, TopicCreatingForm
 from .models import Course, Topic, Task
-
-from .forms import ChooseStudentsForm, AssignmentUpload
 
 from users.models import CustomUser
 
+
 def is_teacher(user):
     return user.user_type == 'teacher'
+
 
 def is_student(user):
     return user.user_type == 'student'
@@ -45,9 +48,10 @@ def view_all_courses(request):
 
 @login_required(login_url='login_student')
 def get_course(request, pk):
-    if request.user.user_type == 'teacher':
+    if is_teacher(request.user):
         return redirect('change_course', pk=pk)
-    elif request.user.user_type == 'student':
+    
+    elif is_student(request.user):
         try:
             course = Course.objects.get(id=pk)
         except:
@@ -97,7 +101,13 @@ def change_course(request, pk):
     return render(request, 'main/change_course.html', {'course': course})
 
 
-def upload_assignment(request):
+def upload_assignment(request, pk):
+    '''
+    Загрузка задания. При нажатии кнопки происходит переход на страницу с формой
+    для заполнения. Должно быть представлено только одно вложение: либо ссылка, либо 
+    файл.
+    '''
+    topic = Topic.objects.get(id=pk)
     if request.method == 'POST':
         form = AssignmentUpload(request.POST, request.FILES)
         if form.is_valid():
@@ -155,11 +165,10 @@ def add_topic(request, pk: int):
 def change_task(request, pk, task_pk):
     topic = Topic.objects.get(id=pk)
     task = Task.objects.get(id=task_pk)
-
     if request.method == 'POST':
         form = AssignmentUpload(request.POST, request.FILES, instance=task)
         if form.is_valid():
-            
+
             new_task = form.save(commit=False)
 
             file = form.cleaned_data['file']
@@ -176,6 +185,7 @@ def change_task(request, pk, task_pk):
         
     else:
         form = AssignmentUpload(instance=task)
+
 
     return render(request, 'main/change_task.html', {'form': form, 'task_id': task.id, 'topic_id': topic.id})
 
@@ -220,4 +230,3 @@ def delete_topic(request, pk, topic_pk):
 
 def upload_homework(request):
     pass
->>>>>>> Stashed changes
