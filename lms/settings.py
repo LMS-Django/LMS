@@ -15,7 +15,6 @@ import os
 from pathlib import Path
 
 dotenv.load_dotenv()
-db_conf = dict(dotenv.dotenv_values('.env'))
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -31,7 +30,7 @@ SECRET_KEY = 'django-insecure-u^i+9u4^=1c4j8e90c_t9u4lic4tpyc-8&aacx#mt^ma2s_zwr
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [os.getenv("ALLOWED_HOSTS", "")]
 
 
 # Application definition
@@ -92,7 +91,11 @@ WSGI_APPLICATION = 'lms.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        **db_conf
+        "NAME": os.getenv("NAME"),
+        "USER": os.getenv("USER"),
+        "PASSWORD": os.getenv("PASSWORD"),
+        "HOST": os.getenv("HOST", "localhost"),
+        "PORT": os.getenv("PORT", "5432"),
     },
 }
 

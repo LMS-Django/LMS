@@ -1,14 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <form method="post">
+{% extends 'users/base.html' %}
+
+{% block content %}
+    <div class="text-center mb-4">
+        <h1 class="text-danger">Вы уверены, что хотите удалить задание?</h1>
+    </div>
+    
+    <form method="POST" class="container py-4" style="max-width: 600px;">
         {% csrf_token %}
-        <button type="submit">Удалить задание</button>
+        <div class="card shadow-sm" style="border: 1px solid #dc3545; background-color: #f8d7da;">
+            <div class="card-body text-center">
+                <p class="mb-3">Это действие нельзя будет отменить.</p>
+                <button type="submit" class="btn btn-danger btn-lg">Удалить задание</button>
+            </div>
+        </div>
     </form>
-</body>
-</html>
+{% endblock %}

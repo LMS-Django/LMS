@@ -28,4 +28,5 @@ ENV DJANGO_SUPERUSER_EMAIL=admin@example.com
 EXPOSE 8000
 
 # Команда запуска
-CMD ["sh", "-c", "python manage.py makemigrations main users && python manage.py migrate && python manage.py createsuperuser --noinput --first_name admin --last_name admin --email admin@example.com && python manage.py runserver 0.0.0.0:8000"]
+CMD ["sh", "-c", "sleep 10 && python manage.py makemigrations main users && python manage.py migrate && python manage.py createsuperuser --noinput --first_name admin --last_name admin --email admin@example.com && python manage.py runserver 0.0.0.0:8000"]
+
