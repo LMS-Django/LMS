@@ -13,6 +13,11 @@
         <div>
             {{ topic.title }}
         </div>
+
+        <a href="{% url 'upload_assignment' topic.id %}">Добавить материалы в тему</a>
+        <a href="{% url 'change_topic' course.id topic.id %}">Отредактировать тему</a>
+        <a href="{% url 'delete_topic' course.id topic.id %}">Удалить тему</a>
+
     </li>
     {% endfor %}
 </ul>

@@ -10,6 +10,14 @@ urlpatterns = [
     path('get_course/<int:pk>', views.get_course, name='course_detail'),
     path('change_course/<int:pk>', views.change_course, name='change_course'),
     path('add_students/<int:pk>', views.add_students, name='add_students'),
-    path('upload_assignment', views.upload_assignment, name='upload_homework'),
-    path('get_assignment', views.get_assignment, name='get_assignment'),
+    path('get_assignment/<int:pk>', views.get_assignment, name='get_assignment'),
+    path('change_course/<int:pk>', views.change_course, name='change_course'),
+    path('change_course/<int:pk>/add_topic', views.add_topic, name='add_topic'),
+    path('change_course/<int:pk>/change_topic/<int:topic_pk>', views.change_topic, name='change_topic'),
+    path('change_course/<int:pk>/delete_topic/<int:topic_pk>', views.delete_topic, name='delete_topic'),
+
+    path('change_topic/<int:pk>/add_assignment', views.upload_assignment, name='upload_assignment'),
+    path('change_topic/<int:pk>/change_task/<int:task_pk>', views.change_task, name='change_task'),
+    path('change_topic/<int:pk>/delete_task/<int:task_pk>', views.delete_task, name='delete_task'),
+
 ]

@@ -12,6 +12,7 @@
     </div>
     <a href="{% url 'password_reset' %}">Сменить пароль</a>
     <a href="{% url 'logout' %}">Выйти из профиля</a>
+    {% if courses %}
     {% if user_type == "teacher" %}
         <h2>Курсы, которые вы ведете:</h2>
     {% elif user_type == "student" %}
@@ -25,4 +26,7 @@
         </li>
     {% endfor %}
     </ul>
+    {% else %}
+        <h2>У вас пока нет доступных курсов.</h2>
+    {% endif %}
 {% endblock %}
