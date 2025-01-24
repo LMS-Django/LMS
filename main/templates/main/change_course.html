@@ -18,6 +18,7 @@
             <li class="list-group-item">
                 <div class="mb-3">
                     <h2 class="text-secondary">{{ topic.title }}</h2>
+                    <p>{{ topic.description }}</p> <!-- Описание темы перемещено сюда -->
                 </div>
                 <ul class="list-group list-group-flush">
                     {% for a in topic.assignments.all %}
