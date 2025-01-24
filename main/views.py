@@ -1,18 +1,21 @@
+import random
+
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-import random
 
-
+from .exceptions import NoDataError, ExessDataError
+from .forms import ChooseStudentsForm, AssignmentUpload, TopicCreatingForm
 from .models import Course, Topic, Task
-
-from .forms import ChooseStudentsForm, AssignmentUpload
 
 from users.models import CustomUser
 
+
 def is_teacher(user):
     return user.user_type == 'teacher'
+
 
 def is_student(user):
     return user.user_type == 'student'
@@ -45,9 +48,10 @@ def view_all_courses(request):
 
 @login_required(login_url='login_student')
 def get_course(request, pk):
-    if request.user.user_type == 'teacher':
+    if is_teacher(request.user):
         return redirect('change_course', pk=pk)
-    elif request.user.user_type == 'student':
+    
+    elif is_student(request.user):
         try:
             course = Course.objects.get(id=pk)
         except:
@@ -97,11 +101,26 @@ def change_course(request, pk):
     return render(request, 'main/change_course.html', {'course': course})
 
 
-def upload_assignment(request):
+def upload_assignment(request, pk):
+    '''
+    Загрузка задания. При нажатии кнопки происходит переход на страницу с формой
+    для заполнения. Должно быть представлено только одно вложение: либо ссылка, либо 
+    файл.
+    '''
+    topic = Topic.objects.get(id=pk)
     if request.method == 'POST':
         form = AssignmentUpload(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            
+
+            new_task = form.save(commit=False)
+            new_task.topic = topic
+            new_task.save()
+        
+            # if file and url:
+            #     messages.error(request, 'Нужно заполнить только одно поле: файл/ссылка на диск.')
+            #     return redirect(upload_assignment)
+        
             return redirect('profile')
         
     else:
@@ -110,6 +129,67 @@ def upload_assignment(request):
     return render(request, 'main/upload_task.html', {'form': form})
 
 
-def get_assignment(request):
-    assignments = Task.objects.all()
-    return render(request, 'main/get_task.html', {'assignment': assignments})
+def get_assignment(request, pk):
+    assignment = Task.objects.get(id=pk)
+    # print(assignment)
+    return render(request, 'main/get_task.html', {'assignment': assignment})
+
+
+def add_topic(request, pk: int):
+    '''
+    Добавление темы в курс, при нажатии кнопки выполняется переход на страницу формы.
+    По окончании добавления происходит переход обратно на страницу курса.
+
+    :param pk: id курса, для которого добавляется тема.
+    '''
+
+    course = Course.objects.get(id=pk)
+    if request.method == 'POST':
+        form = TopicCreatingForm(request.POST)
+        if form.is_valid():
+            
+            new_topic = form.save(commit=False)
+            new_topic.course = course
+            new_topic.save()
+
+            return redirect('change_course', course.id)
+
+    else:
+        form = TopicCreatingForm()
+
+    return render(request, 'main/add_topic.html', {'form': form})
+
+
+def change_task(request, pk, task_pk):
+    topic = Topic.objects.get(id=pk)
+    task = Task.objects.get(id=task_pk)
+    if request.method == 'POST':
+        form = AssignmentUpload(request.POST, request.FILES, instance=task)
+        if form.is_valid():
+            
+            print(form.cleaned_data)
+            # new_task = form.save(commit=False)
+            # new_task.topic = topic
+            # new_task.save()
+        
+            # if file and url:
+            #     messages.error(request, 'Нужно заполнить только одно поле: файл/ссылка на диск.')
+            #     return redirect(upload_assignment)
+        
+            return redirect('profile')
+        
+    else:
+        form = AssignmentUpload()
+
+    return render(request, 'main/change_task.html', {'form': form, 'task_id': task.id, 'topic_id': topic.id})
+
+
+def delete_task(request, pk, task_pk):
+    task = Task.objects.get(id=task_pk)
+    topic = Topic.objects.get(id=pk)
+    course = topic.course
+    if request.method == 'POST':
+        task.delete()
+        return redirect('change_course', course.id)
+    
+    return render(request, 'main/delete_task.html')

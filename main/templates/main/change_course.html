@@ -7,13 +7,27 @@
 
 <div class="container" style="max-width: 800px; margin: 20px auto; padding: 20px; border: 1px solid #0d6efd; border-radius: 10px; background-color: #f0f8ff;">
     <p>{{ course.description }}</p>
-    
-    <ul class="list-group">
-        {% for topic in course.topics.all %}
-        <li class="list-group-item">
-            <h3 style="font-family: Arial, sans-serif; color: #0d6efd;">{{ topic.title }}</h3>
-        </li>
-        {% endfor %}
-    </ul>
-</div>
-{% endblock %}
+    <ul>
+    {% for topic in course.topics.all %}
+    <li>
+        <div>
+            <h2>{{ topic.title }}</h2>
+            <ul>
+                {% for a in topic.assignments.all %}
+                <li>
+                    <h3>{{ a.title }}</h3>
+                    {{ a.description }}
+                    <div>
+                        <a href="{% url 'change_task' topic.id a.id %}">Отредактировать или удалить задание</a>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <a href="{% url 'upload_assignment' topic.id %}">Добавить материалы в тему</a>
+    </li>
+    {% endfor %}
+    <a href="{% url 'add_topic' course.id %}">Создать тему</a> 
+</ul>
+</body>
+</html>

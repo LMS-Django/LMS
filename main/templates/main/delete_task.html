@@ -6,10 +6,9 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>{{ assignment.title }}</h1>
-    <p>{{ assignment.description }}</p>
-    <a href="{{ assignment.file.url }}">{{ assignment.title }}</a>
-    <!-- {{ assignment.file }} -->
-    
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Удалить задание</button>
+    </form>
 </body>
 </html>
