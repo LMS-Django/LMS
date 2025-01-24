@@ -23,10 +23,10 @@ class ChooseStudentsForm(Form):
 class AssignmentUpload(ModelForm):
     class Meta:
         model = Task
-        exclude = []
+        exclude = ['topic']
 
 
 class TopicCreatingForm(ModelForm):
     class Meta:
         model = Topic
-        exclude = []
+        exclude = ['course']

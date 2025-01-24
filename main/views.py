@@ -101,17 +101,25 @@ def change_course(request, pk):
     return render(request, 'main/change_course.html', {'course': course})
 
 
-def upload_assignment(request):
+def upload_assignment(request, pk):
+    '''
+    Загрузка задания. При нажатии кнопки происходит переход на страницу с формой
+    для заполнения. Должно быть представлено только одно вложение: либо ссылка, либо 
+    файл.
+    '''
+    topic = Topic.objects.get(id=pk)
     if request.method == 'POST':
         form = AssignmentUpload(request.POST, request.FILES)
         if form.is_valid():
             
-            url = form.cleaned_data['url']
-            file = form.cleaned_data['file']
+
+            new_task = form.save(commit=False)
+            new_task.topic = topic
+            new_task.save()
         
-            if file and url:
-                messages.error(request, 'Нужно заполнить только одно поле: файл/ссылка на диск.')
-                return redirect(upload_assignment)
+            # if file and url:
+            #     messages.error(request, 'Нужно заполнить только одно поле: файл/ссылка на диск.')
+            #     return redirect(upload_assignment)
         
             return redirect('profile')
         
@@ -127,18 +135,61 @@ def get_assignment(request, pk):
     return render(request, 'main/get_task.html', {'assignment': assignment})
 
 
-def add_topic(request):
+def add_topic(request, pk: int):
+    '''
+    Добавление темы в курс, при нажатии кнопки выполняется переход на страницу формы.
+    По окончании добавления происходит переход обратно на страницу курса.
+
+    :param pk: id курса, для которого добавляется тема.
+    '''
+
+    course = Course.objects.get(id=pk)
     if request.method == 'POST':
         form = TopicCreatingForm(request.POST)
         if form.is_valid():
             
-            course = form.cleaned_data['course']
-            new_topic = form.save()
+            new_topic = form.save(commit=False)
+            new_topic.course = course
+            new_topic.save()
 
-            # prev_url = request.META.get('HTTP_REFERER', )
             return redirect('change_course', course.id)
 
     else:
         form = TopicCreatingForm()
 
     return render(request, 'main/add_topic.html', {'form': form})
+
+
+def change_task(request, pk, task_pk):
+    topic = Topic.objects.get(id=pk)
+    task = Task.objects.get(id=task_pk)
+    if request.method == 'POST':
+        form = AssignmentUpload(request.POST, request.FILES, instance=task)
+        if form.is_valid():
+            
+            print(form.cleaned_data)
+            # new_task = form.save(commit=False)
+            # new_task.topic = topic
+            # new_task.save()
+        
+            # if file and url:
+            #     messages.error(request, 'Нужно заполнить только одно поле: файл/ссылка на диск.')
+            #     return redirect(upload_assignment)
+        
+            return redirect('profile')
+        
+    else:
+        form = AssignmentUpload()
+
+    return render(request, 'main/change_task.html', {'form': form, 'task_id': task.id, 'topic_id': topic.id})
+
+
+def delete_task(request, pk, task_pk):
+    task = Task.objects.get(id=task_pk)
+    topic = Topic.objects.get(id=pk)
+    course = topic.course
+    if request.method == 'POST':
+        task.delete()
+        return redirect('change_course', course.id)
+    
+    return render(request, 'main/delete_task.html')

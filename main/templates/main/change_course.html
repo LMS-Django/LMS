@@ -11,11 +11,23 @@
     {% for topic in course.topics.all %}
     <li>
         <div>
-            {{ topic.title }}
+            <h2>{{ topic.title }}</h2>
+            <ul>
+                {% for a in topic.assignments.all %}
+                <li>
+                    <h3>{{ a.title }}</h3>
+                    {{ a.description }}
+                    <div>
+                        <a href="{% url 'change_task' topic.id a.id %}">Отредактировать или удалить задание</a>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
         </div>
+        <a href="{% url 'upload_assignment' topic.id %}">Добавить материалы в тему</a>
     </li>
     {% endfor %}
-    <a href="{% url 'add_topic' %}">Создать тему</a> 
+    <a href="{% url 'add_topic' course.id %}">Создать тему</a> 
 </ul>
 </body>
 </html>
