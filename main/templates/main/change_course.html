@@ -1,36 +1,44 @@
 {% extends 'users/base.html' %}
 
 {% block content %}
-<div class="text-center" style="margin-top: 50px;">
-    <h1 style="font-family: Arial, sans-serif; color: #0d6efd;">{{ course.title }}</h1>
+<div class="text-center my-5">
+    <h1 class="text-primary">{{ course.title }}</h1>
 </div>
 
-<div class="container" style="max-width: 800px; margin: 20px auto; padding: 20px; border: 1px solid #0d6efd; border-radius: 10px; background-color: #f0f8ff;">
-    <p>{{ course.description }}</p>
-    <ul>
-    {% for topic in course.topics.all %}
-    <li>
-        <div>
-            <h2>{{ topic.title }}</h2>
-            <ul>
-                {% for a in topic.assignments.all %}
-                <li>
-                    <h3>{{ a.title }}</h3>
-                    {{ a.description }}
-                    <div>
-                        <a href="{% url 'change_task' topic.id a.id %}">Отредактировать или удалить задание</a>
-                    </div>
-                </li>
-                {% endfor %}
-            </ul>
+<div class="container" style="max-width: 800px;">
+    <div class="card shadow-sm border-primary">
+        <div class="card-body">
+            <p class="card-text">{{ course.description }}</p>
         </div>
+    </div>
 
-        <a href="{% url 'upload_assignment' topic.id %}">Добавить материалы в тему</a>
-        <a href="{% url 'change_topic' course.id topic.id %}">Отредактировать тему</a>
-        <a href="{% url 'delete_topic' course.id topic.id %}">Удалить тему</a>
-    </li>
-    {% endfor %}
-    <a href="{% url 'add_topic' course.id %}">Создать тему</a> 
-</ul>
-</body>
-</html>
+    <div class="my-4">
+        <ul class="list-group">
+            {% for topic in course.topics.all %}
+            <li class="list-group-item">
+                <div class="mb-3">
+                    <h2 class="text-secondary">{{ topic.title }}</h2>
+                </div>
+                <ul class="list-group list-group-flush">
+                    {% for a in topic.assignments.all %}
+                    <li class="list-group-item">
+                        <h4 class="text-dark">{{ a.title }}</h4>
+                        <p>{{ a.description }}</p>
+                        <a href="{% url 'change_task' topic.id a.id %}" class="btn btn-outline-secondary btn-sm">Редактировать/Удалить задание</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+                <div class="mt-3 d-flex gap-2">
+                    <a href="{% url 'upload_assignment' topic.id %}" class="btn btn-outline-primary btn-sm">Добавить материалы</a>
+                    <a href="{% url 'change_topic' course.id topic.id %}" class="btn btn-outline-warning btn-sm">Редактировать тему</a>
+                    <a href="{% url 'delete_topic' course.id topic.id %}" class="btn btn-outline-danger btn-sm">Удалить тему</a>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+        <div class="mt-4 text-center">
+            <a href="{% url 'add_topic' course.id %}" class="btn btn-primary btn-lg">Создать тему</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
