@@ -34,56 +34,97 @@ docker-compose up -d
 ```plaintext 
 ├── Dockerfile
 ├── README.md
-├── create_superuser.py
 ├── docker-compose.yaml
-├── entrypoint.sh
-├── get-docker.sh
 ├── lms
 │   ├── __init__.py
+│   ├── __pycache__
+│   │   ├── __init__.cpython-310.pyc
+│   │   ├── settings.cpython-310.pyc
+│   │   ├── urls.cpython-310.pyc
+│   │   └── wsgi.cpython-310.pyc
 │   ├── asgi.py
 │   ├── settings.py
 │   ├── urls.py
 │   └── wsgi.py
 ├── main
 │   ├── __init__.py
+│   ├── __pycache__
+│   │   ├── __init__.cpython-310.pyc
+│   │   ├── admin.cpython-310.pyc
+│   │   ├── apps.cpython-310.pyc
+│   │   ├── exceptions.cpython-310.pyc
+│   │   ├── forms.cpython-310.pyc
+│   │   ├── models.cpython-310.pyc
+│   │   ├── urls.cpython-310.pyc
+│   │   └── views.cpython-310.pyc
 │   ├── admin.py
 │   ├── apps.py
+│   ├── exceptions.py
 │   ├── forms.py
 │   ├── migrations
+│   │   ├── 0001_initial.py
+│   │   ├── 0002_alter_course_students_alter_course_teacher.py
+│   │   ├── __init__.py
+│   │   └── __pycache__
+│   │       ├── 0001_initial.cpython-310.pyc
+│   │       ├── 0002_alter_course_students_alter_course_teacher.cpython-310.pyc
+│   │       ├── 0002_initial.cpython-310.pyc
+│   │       └── __init__.cpython-310.pyc
 │   ├── models.py
 │   ├── templates
 │   │   └── main
 │   │       ├── 404.html
+│   │       ├── add_students.html
+│   │       ├── add_topic.html
 │   │       ├── all_courses_list.html
 │   │       ├── base.html
+│   │       ├── change_course.html
+│   │       ├── change_task.html
 │   │       ├── course_details.html
-│   │       ├── login_page.html
-│   │       ├── logout.html
+│   │       ├── delete_task.html
+│   │       ├── get_task.html
 │   │       ├── main.html
-│   │       ├── profile.html
-│   │       └── register_page.html
+│   │       ├── upload_homework.html
+│   │       └── upload_task.html
 │   ├── tests.py
 │   ├── urls.py
 │   └── views.py
 ├── manage.py
+├── media
+│   └── assignments
+│       └── files
+│           └── Резюме.pdf
 ├── project_structure.txt
 ├── requirements.txt
 └── users
     ├── __init__.py
+    ├── __pycache__
+    │   ├── __init__.cpython-310.pyc
+    │   ├── admin.cpython-310.pyc
+    │   ├── apps.cpython-310.pyc
+    │   ├── forms.cpython-310.pyc
+    │   ├── models.cpython-310.pyc
+    │   ├── urls.cpython-310.pyc
+    │   └── views.cpython-310.pyc
     ├── admin.py
     ├── apps.py
     ├── forms.py
     ├── migrations
     │   ├── 0001_initial.py
-    │   └── __init__.py
+    │   ├── __init__.py
+    │   └── __pycache__
+    │       ├── 0001_initial.cpython-310.pyc
+    │       └── __init__.cpython-310.pyc
     ├── models.py
     ├── templates
     │   └── users
     │       ├── base.html
-    │       ├── login_page.html
+    │       ├── login_page_student.html
+    │       ├── login_page_teacher.html
     │       ├── logout.html
     │       ├── profile.html
-    │       └── register_page.html
+    │       ├── register_page.html
+    │       └── reset_password.html
     ├── tests.py
     ├── urls.py
     └── views.py
