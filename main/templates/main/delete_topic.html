@@ -1,15 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>Хотите удалить данную тему? Данное действие нельзя будет отменить.</h1>
-    <form method="post">
+{% extends 'users/base.html' %}
+
+{% block content %}
+<div class="container" style="max-width: 600px; margin-top: 50px;">
+    <div class="card shadow-sm border-danger">
+        <div class="card-body text-center">
+            <h1 class="text-danger">Удаление темы</h1>
+            <p class="text-muted">Вы уверены, что хотите удалить данную тему? Это действие нельзя будет отменить.</p>
+        </div>
+    </div>
+
+    <form method="post" class="mt-4 text-center">
         {% csrf_token %}
-        <button type="submit">Удалить тему</button>
+        <button type="submit" class="btn btn-danger btn-lg">Удалить тему</button>
     </form>
-</body>
-</html>
+</div>
+{% endblock %}
