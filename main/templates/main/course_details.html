@@ -11,23 +11,20 @@
     <ul class="list-group">
         {% for topic in course.topics.all %}
             {% if topic.is_open %}
-            <li>
-            <h2>{{ topic.title }}</h2>
+            <li class="list-group-item">
+                <h2 class="text-secondary">{{ topic.title }}</h2>
+                <p>{{ topic.description }}</p> <!-- Описание перемещено сюда -->
 
-            <p>{{ topic.description }}</p>
-
-            <ul class="list-group">
-                {% for assignment in topic.assignments.all %}
-                <li>
-                    <p>{{ assignment.id }}</p>
-                    <a href="{% url 'get_assignment' assignment.id %}">{{ assignment.title }}</a>
-                    
-                </li>
-                {% endfor %}
-            </ul>
-        </li>
+                <ul class="list-group list-group-flush">
+                    {% for assignment in topic.assignments.all %}
+                    <li class="list-group-item">
+                        <p>{{ assignment.id }}</p>
+                        <a href="{% url 'get_assignment' assignment.id %}">{{ assignment.title }}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </li>
             {% endif %}
-        
         {% endfor %}
     </ul>
     <div>
