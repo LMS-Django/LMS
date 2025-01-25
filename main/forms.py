@@ -15,10 +15,10 @@ class ChooseStudentsForm(Form):
         course = kwargs.pop('course')
         super().__init__(*args, **kwargs)
 
-        students = CustomUser.objects.filter(user_type='student').exclude(courses=course)
+        students = CustomUser.objects.filter(user_type='student').exclude(enrolled_courses=course)
         
         self.fields['options'].choices = [(str(student.id), student) for student in students if not student.is_superuser]
-
+        print(self.fields['options'].choices)
 
 class AssignmentUpload(ModelForm):
     class Meta:

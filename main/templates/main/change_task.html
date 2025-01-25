@@ -30,13 +30,18 @@
 <div class="text-center mt-4">
     <a href="{% url 'delete_task' topic.id task.id %}" class="btn btn-danger btn-lg">Удалить задание</a>
 </div>
+
 {% if subm %}
-{% for sub in subm %}
-<div>
-    <p>{{ sub.student }}
-    <a href="{% url 'rate_homework' sub.id %}">Оценить</a>
-</p>
+<div class="mt-5">
+    <h2 class="text-secondary text-center">Работы студентов</h2>
+    <ul class="list-group mt-3" style="max-width: 600px; margin: 0 auto;">
+        {% for sub in subm %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <span>{{ sub.student }}</span>
+            <a href="{% url 'rate_homework' sub.id %}" class="btn btn-outline-primary btn-sm">Оценить</a>
+        </li>
+        {% endfor %}
+    </ul>
 </div>
-{% endfor %}
 {% endif %}
 {% endblock %}

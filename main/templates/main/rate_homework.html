@@ -1,15 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Оценить</button>
-    </form>
-</body>
-</html>
+{% extends 'users/base.html' %}
+
+{% block content %}
+<div class="text-center mb-4">
+    <h1 class="text-primary">Оценить работу студента</h1>
+</div>
+
+<form method="POST" enctype="multipart/form-data" class="container py-4" style="max-width: 600px;">
+    {% csrf_token %}
+    <div class="card shadow-sm" style="border: 1px solid #0d6efd; background-color: #f0f8ff;">
+        <div class="card-body">
+            <div class="mb-3">
+                {{ form.as_p }}
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary btn-lg">Оценить</button>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}

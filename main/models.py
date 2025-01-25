@@ -38,13 +38,12 @@ class Topic(models.Model):
 
 class Task(models.Model):
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE, related_name="assignments", default='')
-    title = models.CharField(default='h', max_length=255)
-    description = models.TextField(default='hello')
-    due_date = models.DateField(default='2002-11-11')
+    title = models.CharField(max_length=255)
+    description = models.TextField(default='')
+    due_date = models.DateField()
     need_homework = models.BooleanField(default=False)
     file = models.FileField(upload_to="assignments/files/", null=True, blank=True)
     url = models.URLField(default='', blank=True)
-
 
     # def clean(self):
     #     if not self.file and not self.url:

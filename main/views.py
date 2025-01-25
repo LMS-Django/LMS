@@ -257,9 +257,11 @@ def upload_homework(request, pk):
 
     return render(request, 'main/get_task.html', {'form': form, 'assignment': task})
 
-
+@login_required(login_url='login_teacher')
 def rate_homework(request, pk):
     hw = Homework.objects.get(id=pk)
+    topic = hw.topic
+    course = topic.course
 
     if request.method == 'POST':
         form = HomeworkRating(request.POST, instance=hw)
@@ -268,7 +270,7 @@ def rate_homework(request, pk):
 
             form.save()
 
-            return redirect('profile')
+            return redirect('change_homework', course.id)
         
     else:
         form = HomeworkRating(instance=hw)
