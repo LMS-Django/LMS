@@ -1,8 +1,14 @@
 {% extends 'users/base.html' %}
 
 {% block content %}
+
     <div class="text-center mb-4">
         <h1 class="text-primary">{{ assignment.title }}</h1>
+    </div>
+    <div class="mb-3">
+        {% for message in messages %}
+            <div class="alert alert-danger" role="alert">{{ message }}</div>
+        {% endfor %}
     </div>
     
     <div class="card shadow-sm" style="border: 1px solid #0d6efd; background-color: #f0f8ff;">
@@ -12,6 +18,13 @@
                 <a href="{{ assignment.file.url }}" class="btn btn-info btn-lg">Скачать файл: {{ assignment.title }}</a>
             {% else %}
                 <p class="text-muted">Файл не прикреплён</p>
+            {% endif %}
+            {% if assignment.need_homework %}
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Отправить</button>
+            </form>
             {% endif %}
         </div>
     </div>

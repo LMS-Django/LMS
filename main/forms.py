@@ -1,6 +1,6 @@
 from django.forms import Form, ModelForm, MultipleChoiceField, SelectMultiple
 
-from main.models import Task, Topic
+from main.models import Task, Topic, Homework
 from users.models import CustomUser
 
 
@@ -30,3 +30,15 @@ class TopicCreatingForm(ModelForm):
     class Meta:
         model = Topic
         exclude = ['course']
+
+
+class HomeworkUploading(ModelForm):
+    class Meta:
+        model = Homework
+        exclude = ['student', 'assignment', 'mark', 'teacher_comment']
+
+
+class HomeworkRating(ModelForm):
+    class Meta:
+        model = Homework
+        exclude = []

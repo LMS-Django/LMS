@@ -57,31 +57,24 @@ class Task(models.Model):
         return self.title
 
 
-# class StudentsGroup(models.Model):
-#     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="students_groups")
-#     name = models.CharField(max_length=255)
-#     students = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="students_groups")
-
-#     def __str__(self):
-#         return f"{self.name} ({self.course.title})"
-
-
-# class Attendance(models.Model):
-#     group = models.ForeignKey(StudentsGroup, on_delete=models.CASCADE, related_name="attendance_records")
-#     student = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-#     date = models.DateField()
-#     is_present = models.BooleanField(default=False)
-
-#     def __str__(self):
-#         return f"{self.student.username} - {self.date} - {self.is_present}"
-
-
 class Homework(models.Model):
-    assignment = models.ForeignKey(Task, on_delete=models.CASCADE, related_name="submissions")
-    student = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    MARKS = [
+        ('0', 'не проверено'),
+        ('2', 'неудовлетворительно'),
+        ('3', 'удовлетворительно'),
+        ('4', 'хорошо'),
+        ('5', 'отлично')
+    ]
+
+    assignment = models.ForeignKey(Task, on_delete=models.SET_NULL, related_name="submissions", null=True)
+    student = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
     file = models.FileField(upload_to="homework/files/", null=True, blank=True)
     url = models.URLField(null=True, blank=True)
     submission_date = models.DateTimeField(auto_now_add=True)
+    mark = models.CharField(max_length=3,
+                            choices=MARKS,
+                            default='0')
+    teacher_comment = models.TextField(null=True)
 
     def __str__(self):
         return f"{self.student.email} - {self.assignment.title}"

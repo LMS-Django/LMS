@@ -2,13 +2,14 @@ import random
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
 from .exceptions import NoDataError, ExessDataError
-from .forms import ChooseStudentsForm, AssignmentUpload, TopicCreatingForm
-from .models import Course, Topic, Task
+from .forms import ChooseStudentsForm, AssignmentUpload, TopicCreatingForm, HomeworkUploading, HomeworkRating
+from .models import Course, Topic, Task, Homework
 
 from users.models import CustomUser
 
@@ -131,10 +132,10 @@ def upload_assignment(request, pk):
     return render(request, 'main/upload_task.html', {'form': form})
 
 
-def get_assignment(request, pk):
-    assignment = Task.objects.get(id=pk)
-    # print(assignment)
-    return render(request, 'main/get_task.html', {'assignment': assignment})
+# def get_assignment(request, pk):
+#     assignment = Task.objects.get(id=pk)
+#     # print(assignment)
+#     return render(request, 'main/get_task.html', {'assignment': assignment})
 
 
 def add_topic(request, pk: int):
@@ -186,8 +187,13 @@ def change_task(request, pk, task_pk):
     else:
         form = AssignmentUpload(instance=task)
 
-
-    return render(request, 'main/change_task.html', {'form': form, 'task_id': task.id, 'topic_id': topic.id})
+    unchecked_submissions = task.submissions.filter(mark='0')
+    print(unchecked_submissions)
+    # print(len(unchecked_submissions))
+    return render(request, 'main/change_task.html', {'form': form, 
+                                                     'task': task, 
+                                                     'topic': topic,
+                                                     'subm': unchecked_submissions})
 
 
 def delete_task(request, pk, task_pk):
@@ -228,5 +234,48 @@ def delete_topic(request, pk, topic_pk):
     return render(request, 'main/delete_topic.html')
 
 
-def upload_homework(request):
-    pass
+def upload_homework(request, pk):
+    task = Task.objects.get(id=pk)
+    if request.method == 'POST':
+        form = HomeworkUploading(request.POST, request.FILES)
+        if form.is_valid():
+            hw = form.save(commit=False)
+
+            if form.cleaned_data['file'] and form.cleaned_data['url']:
+                messages.error(request, 'Нужно заполнить только одно поле: файл/ссылка на диск.')
+                return redirect('get_assignment', pk)
+            
+            hw.assignment = task
+            hw.student = request.user
+            hw.save()
+
+
+            return redirect('profile')
+
+    else:
+        form = HomeworkUploading()
+
+    return render(request, 'main/get_task.html', {'form': form, 'assignment': task})
+
+
+def rate_homework(request, pk):
+    hw = Homework.objects.get(id=pk)
+
+    if request.method == 'POST':
+        form = HomeworkRating(request.POST, instance=hw)
+        if form.is_valid():
+            print(form.cleaned_data)
+
+            form.save()
+
+            return redirect('profile')
+        
+    else:
+        form = HomeworkRating(instance=hw)
+
+    return render(request, 'main/rate_homework.html', {'form': form})
+
+
+def checked_homeworks(request):
+    checked_homeworks = Homework.objects.filter(Q(student=request.user) & ~Q(mark='0'))
+    return render(request, 'main/checked_homeworks.html', {'hw': checked_homeworks})
