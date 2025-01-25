@@ -1,16 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>Здесь вы можете изменить данные о теме: название, описание.</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Отправить</button>
-    </form>
-</body>
-</html>
+{% extends 'users/base.html' %}
+
+{% block content %}
+<div class="container" style="max-width: 800px; margin-top: 50px;">
+    <div class="text-center mb-4">
+        <h1 class="text-primary">Изменение данных о теме</h1>
+        <p class="text-muted">Здесь вы можете изменить название и описание темы.</p>
+    </div>
+
+    <div class="card shadow-sm border-primary">
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg">Сохранить изменения</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
